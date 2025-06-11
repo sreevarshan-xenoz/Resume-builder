@@ -1,97 +1,136 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import MainLayout from '@/components/layout/MainLayout';
+import TemplateCard from '@/components/templates/TemplateCard';
+import FeedbackToast from '@/components/ui/FeedbackToast';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
 
 const templates = [
   {
     id: 'modern',
-    name: 'Modern',
+    title: 'Modern',
     description: 'A clean, contemporary design with a focus on skills and experience.',
-    image: '/templates/modern.jpg',
+    imageSrc: '/templates/modern.jpg',
+    popular: true,
   },
   {
     id: 'professional',
-    name: 'Professional',
+    title: 'Professional',
     description: 'Traditional layout perfect for corporate and executive positions.',
-    image: '/templates/professional.jpg',
+    imageSrc: '/templates/professional.jpg',
+    popular: false,
   },
   {
     id: 'creative',
-    name: 'Creative',
+    title: 'Creative',
     description: 'Stand out with this bold design for creative industries.',
-    image: '/templates/creative.jpg',
+    imageSrc: '/templates/creative.jpg',
+    popular: true,
   },
   {
     id: 'minimal',
-    name: 'Minimal',
+    title: 'Minimal',
     description: 'Simple and elegant design that lets your content shine.',
-    image: '/templates/minimal.jpg',
+    imageSrc: '/templates/minimal.jpg',
+    popular: false,
   },
   {
     id: 'tech',
-    name: 'Tech',
+    title: 'Tech',
     description: 'Perfect for IT professionals with focus on technical skills.',
-    image: '/templates/tech.jpg',
+    imageSrc: '/templates/tech.jpg',
+    popular: false,
   },
   {
     id: 'executive',
-    name: 'Executive',
+    title: 'Executive',
     description: 'Sophisticated design for senior management positions.',
-    image: '/templates/executive.jpg',
+    imageSrc: '/templates/executive.jpg',
+    popular: false,
   },
 ];
 
 export default function Templates() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('info');
+
+  const handlePreviewClick = (templateId: string) => {
+    setIsLoading(true);
+    
+    // Simulate loading
+    setTimeout(() => {
+      setIsLoading(false);
+      setToastMessage(`Template preview for ${templateId} will be available soon!`);
+      setToastType('info');
+      setShowToast(true);
+    }, 1500);
+  };
+
   return (
     <MainLayout>
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Choose Your Template</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <motion.h1 
+            className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Choose Your Template
+          </motion.h1>
+          <motion.p 
+            className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             Select from our professionally designed templates to create your perfect resume.
-          </p>
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {templates.map((template, index) => (
-            <motion.div
-              key={template.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <div className="relative h-60 bg-gray-200">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                  {/* Placeholder for actual template images */}
-                  <div className="w-full h-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-primary-700">{template.name}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{template.name}</h3>
-                <p className="text-gray-600 mb-4">{template.description}</p>
-                <div className="flex space-x-3">
-                  <Link 
-                    href={`/builder?template=${template.id}`}
-                    className="flex-1 bg-primary-600 text-white py-2 px-4 rounded-md text-center hover:bg-primary-700 transition-colors"
-                  >
-                    Use Template
-                  </Link>
-                  <button className="bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition-colors">
-                    Preview
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <LoadingAnimation size="lg" />
+          </div>
+        ) : (
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            {templates.map((template, index) => (
+              <motion.div
+                key={template.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <TemplateCard
+                  id={template.id}
+                  title={template.title}
+                  description={template.description}
+                  imageSrc={template.imageSrc}
+                  popular={template.popular}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </main>
+      
+      <FeedbackToast
+        message={toastMessage}
+        type={toastType}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+        duration={4000}
+      />
     </MainLayout>
   );
 } 
