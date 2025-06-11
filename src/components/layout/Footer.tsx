@@ -50,6 +50,7 @@ const Footer: React.FC = () => {
         {/* Copyright */}
         <div className="mt-8 pt-8 border-t border-gray-800 text-center">
           <p>&copy; {new Date().getFullYear()} Resume Builder. All rights reserved.</p>
+          <p className="mt-2 text-sm text-gray-400">Designed and Developed by <span className="font-semibold text-primary-400">SREE VARSHAN V</span></p>
         </div>
       </div>
     </footer>
