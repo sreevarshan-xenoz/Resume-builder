@@ -5,6 +5,7 @@ import Link from 'next/link';
 import MainLayout from '@/components/layout/MainLayout';
 import { useResume } from '@/context/ResumeContext';
 import Button from '@/components/ui/Button';
+import AISuggestions from '@/components/features/AISuggestions';
 
 export default function Builder() {
   const [activeStep, setActiveStep] = useState(0);
@@ -52,162 +53,191 @@ export default function Builder() {
         </div>
 
         {/* Content based on active step */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          {activeStep === 0 && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800">Personal Information</h2>
-              <p className="text-gray-600">Let's start with your basic information.</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="John"
-                    value={currentResume?.personalInfo.firstName || ''}
-                    onChange={(e) => updatePersonalInfo({ firstName: e.target.value })}
-                  />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              {activeStep === 0 && (
+                <div className="space-y-6">
+                  <h2 className="text-2xl font-bold text-gray-800">Personal Information</h2>
+                  <p className="text-gray-600">Let's start with your basic information.</p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                      <input
+                        type="text"
+                        id="firstName"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="John"
+                        value={currentResume?.personalInfo.firstName || ''}
+                        onChange={(e) => updatePersonalInfo({ firstName: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="Doe"
+                        value={currentResume?.personalInfo.lastName || ''}
+                        onChange={(e) => updatePersonalInfo({ lastName: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <input
+                        type="email"
+                        id="email"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="john.doe@example.com"
+                        value={currentResume?.personalInfo.email || ''}
+                        onChange={(e) => updatePersonalInfo({ email: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="+1 (555) 123-4567"
+                        value={currentResume?.personalInfo.phone || ''}
+                        onChange={(e) => updatePersonalInfo({ phone: e.target.value })}
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label htmlFor="headline" className="block text-sm font-medium text-gray-700 mb-1">Professional Headline</label>
+                      <input
+                        type="text"
+                        id="headline"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="Senior Software Engineer"
+                        value={currentResume?.personalInfo.headline || ''}
+                        onChange={(e) => updatePersonalInfo({ headline: e.target.value })}
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label htmlFor="summary" className="block text-sm font-medium text-gray-700 mb-1">Professional Summary</label>
+                      <textarea
+                        id="summary"
+                        rows={4}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="A brief summary of your professional background and goals..."
+                        value={currentResume?.personalInfo.summary || ''}
+                        onChange={(e) => updatePersonalInfo({ summary: e.target.value })}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="Doe"
-                    value={currentResume?.personalInfo.lastName || ''}
-                    onChange={(e) => updatePersonalInfo({ lastName: e.target.value })}
-                  />
+              )}
+
+              {activeStep === 1 && (
+                <div className="space-y-6">
+                  <h2 className="text-2xl font-bold text-gray-800">Education</h2>
+                  <p className="text-gray-600">Add your educational background.</p>
+                  
+                  {/* Education form fields would go here */}
+                  <div className="text-center py-12 text-gray-500">
+                    Education form will be implemented here
+                  </div>
                 </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="john.doe@example.com"
-                    value={currentResume?.personalInfo.email || ''}
-                    onChange={(e) => updatePersonalInfo({ email: e.target.value })}
-                  />
+              )}
+
+              {activeStep === 2 && (
+                <div className="space-y-6">
+                  <h2 className="text-2xl font-bold text-gray-800">Work Experience</h2>
+                  <p className="text-gray-600">Add your work history.</p>
+                  
+                  {/* Experience form fields would go here */}
+                  <div className="text-center py-12 text-gray-500">
+                    Experience form will be implemented here
+                  </div>
                 </div>
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="+1 (555) 123-4567"
-                    value={currentResume?.personalInfo.phone || ''}
-                    onChange={(e) => updatePersonalInfo({ phone: e.target.value })}
-                  />
+              )}
+
+              {activeStep === 3 && (
+                <div className="space-y-6">
+                  <h2 className="text-2xl font-bold text-gray-800">Skills</h2>
+                  <p className="text-gray-600">Add your key skills and proficiency levels.</p>
+                  
+                  {/* Skills form fields would go here */}
+                  <div className="text-center py-12 text-gray-500">
+                    Skills form will be implemented here
+                  </div>
                 </div>
-                <div className="md:col-span-2">
-                  <label htmlFor="headline" className="block text-sm font-medium text-gray-700 mb-1">Professional Headline</label>
-                  <input
-                    type="text"
-                    id="headline"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="Senior Software Engineer"
-                    value={currentResume?.personalInfo.headline || ''}
-                    onChange={(e) => updatePersonalInfo({ headline: e.target.value })}
-                  />
+              )}
+
+              {activeStep === 4 && (
+                <div className="space-y-6">
+                  <h2 className="text-2xl font-bold text-gray-800">Preview Your Resume</h2>
+                  <p className="text-gray-600">Here's how your resume looks. You can make changes or export it.</p>
+                  
+                  {/* Resume preview would go here */}
+                  <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
+                    Resume preview will be displayed here
+                  </div>
                 </div>
-                <div className="md:col-span-2">
-                  <label htmlFor="summary" className="block text-sm font-medium text-gray-700 mb-1">Professional Summary</label>
-                  <textarea
-                    id="summary"
-                    rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="A brief summary of your professional background and goals..."
-                    value={currentResume?.personalInfo.summary || ''}
-                    onChange={(e) => updatePersonalInfo({ summary: e.target.value })}
-                  />
+              )}
+
+              {/* Navigation buttons */}
+              <div className="mt-8 flex justify-between">
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveStep(prev => Math.max(0, prev - 1))}
+                  disabled={activeStep === 0}
+                >
+                  Previous
+                </Button>
+                
+                <div className="flex space-x-3">
+                  <Button
+                    variant="secondary"
+                    onClick={saveCurrentResume}
+                  >
+                    Save
+                  </Button>
+                  
+                  <Button
+                    onClick={() => {
+                      if (activeStep === steps.length - 1) {
+                        // Handle finish
+                        saveCurrentResume();
+                      } else {
+                        setActiveStep(prev => Math.min(steps.length - 1, prev + 1));
+                      }
+                    }}
+                  >
+                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  </Button>
                 </div>
               </div>
             </div>
-          )}
+          </div>
 
-          {activeStep === 1 && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800">Education</h2>
-              <p className="text-gray-600">Add your educational background.</p>
-              
-              {/* Education form fields would go here */}
-              <div className="text-center py-12 text-gray-500">
-                Education form will be implemented here
-              </div>
-            </div>
-          )}
-
-          {activeStep === 2 && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800">Work Experience</h2>
-              <p className="text-gray-600">Add your work history.</p>
-              
-              {/* Experience form fields would go here */}
-              <div className="text-center py-12 text-gray-500">
-                Experience form will be implemented here
-              </div>
-            </div>
-          )}
-
-          {activeStep === 3 && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800">Skills</h2>
-              <p className="text-gray-600">Add your key skills and proficiency levels.</p>
-              
-              {/* Skills form fields would go here */}
-              <div className="text-center py-12 text-gray-500">
-                Skills form will be implemented here
-              </div>
-            </div>
-          )}
-
-          {activeStep === 4 && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800">Preview Your Resume</h2>
-              <p className="text-gray-600">Here's how your resume looks. You can make changes or export it.</p>
-              
-              {/* Resume preview would go here */}
-              <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-                Resume preview will be displayed here
-              </div>
-            </div>
-          )}
-
-          {/* Navigation buttons */}
-          <div className="mt-8 flex justify-between">
-            <Button
-              variant="outline"
-              onClick={() => setActiveStep(prev => Math.max(0, prev - 1))}
-              disabled={activeStep === 0}
-            >
-              Previous
-            </Button>
-            
-            <div className="flex space-x-3">
-              <Button
-                variant="secondary"
-                onClick={saveCurrentResume}
-              >
-                Save
-              </Button>
-              
-              <Button
-                onClick={() => {
-                  if (activeStep === steps.length - 1) {
-                    // Handle finish
-                    saveCurrentResume();
-                  } else {
-                    setActiveStep(prev => Math.min(steps.length - 1, prev + 1));
-                  }
-                }}
-              >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-              </Button>
-            </div>
+          {/* AI Suggestions Panel */}
+          <div className="lg:col-span-1">
+            {activeStep === 0 && (
+              <AISuggestions 
+                section="summary" 
+                initialContent={currentResume?.personalInfo.summary || ''} 
+                onApplySuggestion={(suggestion) => updatePersonalInfo({ summary: suggestion })}
+              />
+            )}
+            {activeStep === 2 && (
+              <AISuggestions 
+                section="experience" 
+                initialContent="Add your experience details here" 
+                onApplySuggestion={(suggestion) => console.log("Applied experience suggestion:", suggestion)}
+              />
+            )}
+            {activeStep === 3 && (
+              <AISuggestions 
+                section="skills" 
+                initialContent="Add your skills here" 
+                onApplySuggestion={(suggestion) => console.log("Applied skills suggestion:", suggestion)}
+              />
+            )}
           </div>
         </div>
       </div>

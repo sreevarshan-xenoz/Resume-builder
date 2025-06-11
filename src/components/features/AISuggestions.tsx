@@ -78,6 +78,7 @@ const AISuggestions: React.FC<AISuggestionsProps> = ({
           <div className="space-y-2">
             <p className="text-sm font-medium">AI Suggestion:</p>
             <Textarea
+              id={`ai-suggestion-${section}`}
               value={suggestion}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSuggestion(e.target.value)}
               className="min-h-[120px]"
