@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
+import { ResumeProvider } from '@/context/ResumeContext'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`}>
-        {children}
+        <ResumeProvider>
+          {children}
+        </ResumeProvider>
       </body>
     </html>
   )
