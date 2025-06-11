@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from '../ui/Button';
-import { Textarea } from '../ui/Textarea';
+import Button from '../ui/Button';
+import Textarea from '../ui/Textarea';
 
 interface AISuggestionsProps {
   section: 'summary' | 'experience' | 'skills';
@@ -79,7 +79,7 @@ const AISuggestions: React.FC<AISuggestionsProps> = ({
             <p className="text-sm font-medium">AI Suggestion:</p>
             <Textarea
               value={suggestion}
-              onChange={(e) => setSuggestion(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSuggestion(e.target.value)}
               className="min-h-[120px]"
             />
             <div className="flex space-x-2">
