@@ -2,30 +2,24 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import MainLayout from '@/components/layout/MainLayout';
+import { useResume } from '@/context/ResumeContext';
+import Button from '@/components/ui/Button';
 
 export default function Builder() {
   const [activeStep, setActiveStep] = useState(0);
   const steps = ['Personal Info', 'Education', 'Experience', 'Skills', 'Preview'];
+  
+  const { 
+    currentResume, 
+    updatePersonalInfo, 
+    saveCurrentResume 
+  } = useResume();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-primary-600">Resume Builder</Link>
-          <div className="flex space-x-4">
-            <button className="px-4 py-2 bg-gray-100 rounded-md text-gray-700 hover:bg-gray-200 transition-colors">
-              Save
-            </button>
-            <button className="px-4 py-2 bg-primary-600 rounded-md text-white hover:bg-primary-700 transition-colors">
-              Export
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Steps */}
+    <MainLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Steps */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => (
@@ -72,6 +66,8 @@ export default function Builder() {
                     id="firstName"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="John"
+                    value={currentResume?.personalInfo.firstName || ''}
+                    onChange={(e) => updatePersonalInfo({ firstName: e.target.value })}
                   />
                 </div>
                 <div>
@@ -81,6 +77,8 @@ export default function Builder() {
                     id="lastName"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="Doe"
+                    value={currentResume?.personalInfo.lastName || ''}
+                    onChange={(e) => updatePersonalInfo({ lastName: e.target.value })}
                   />
                 </div>
                 <div>
@@ -90,6 +88,8 @@ export default function Builder() {
                     id="email"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="john.doe@example.com"
+                    value={currentResume?.personalInfo.email || ''}
+                    onChange={(e) => updatePersonalInfo({ email: e.target.value })}
                   />
                 </div>
                 <div>
@@ -99,6 +99,8 @@ export default function Builder() {
                     id="phone"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="+1 (555) 123-4567"
+                    value={currentResume?.personalInfo.phone || ''}
+                    onChange={(e) => updatePersonalInfo({ phone: e.target.value })}
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -108,6 +110,8 @@ export default function Builder() {
                     id="headline"
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="Senior Software Engineer"
+                    value={currentResume?.personalInfo.headline || ''}
+                    onChange={(e) => updatePersonalInfo({ headline: e.target.value })}
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -117,6 +121,8 @@ export default function Builder() {
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="A brief summary of your professional background and goals..."
+                    value={currentResume?.personalInfo.summary || ''}
+                    onChange={(e) => updatePersonalInfo({ summary: e.target.value })}
                   />
                 </div>
               </div>
@@ -173,30 +179,38 @@ export default function Builder() {
 
           {/* Navigation buttons */}
           <div className="mt-8 flex justify-between">
-            <button
+            <Button
+              variant="outline"
               onClick={() => setActiveStep(prev => Math.max(0, prev - 1))}
               disabled={activeStep === 0}
-              className={`px-6 py-2 rounded-md ${
-                activeStep === 0 
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              } transition-colors`}
             >
               Previous
-            </button>
-            <button
-              onClick={() => setActiveStep(prev => Math.min(steps.length - 1, prev + 1))}
-              className={`px-6 py-2 rounded-md ${
-                activeStep === steps.length - 1
-                  ? 'bg-green-600 hover:bg-green-700'
-                  : 'bg-primary-600 hover:bg-primary-700'
-              } text-white transition-colors`}
-            >
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </button>
+            </Button>
+            
+            <div className="flex space-x-3">
+              <Button
+                variant="secondary"
+                onClick={saveCurrentResume}
+              >
+                Save
+              </Button>
+              
+              <Button
+                onClick={() => {
+                  if (activeStep === steps.length - 1) {
+                    // Handle finish
+                    saveCurrentResume();
+                  } else {
+                    setActiveStep(prev => Math.min(steps.length - 1, prev + 1));
+                  }
+                }}
+              >
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </MainLayout>
   );
 } 

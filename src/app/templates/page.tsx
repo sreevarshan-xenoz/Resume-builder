@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import MainLayout from '@/components/layout/MainLayout';
 
 const templates = [
   {
@@ -45,19 +46,7 @@ const templates = [
 
 export default function Templates() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-primary-600">Resume Builder</Link>
-          <nav className="flex space-x-6">
-            <Link href="/" className="text-gray-600 hover:text-primary-600 transition-colors">Home</Link>
-            <Link href="/templates" className="text-primary-600 font-medium">Templates</Link>
-            <Link href="/builder" className="text-gray-600 hover:text-primary-600 transition-colors">Builder</Link>
-          </nav>
-        </div>
-      </header>
-
+    <MainLayout>
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
@@ -103,15 +92,6 @@ export default function Templates() {
           ))}
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-500">
-            <p>&copy; {new Date().getFullYear()} Resume Builder. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </MainLayout>
   );
 } 
