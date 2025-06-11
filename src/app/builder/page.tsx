@@ -6,9 +6,11 @@ import MainLayout from '@/components/layout/MainLayout';
 import { useResume } from '@/context/ResumeContext';
 import Button from '@/components/ui/Button';
 import AISuggestions from '@/components/features/AISuggestions';
+import PDFExport from '@/components/features/PDFExport';
 
 export default function Builder() {
   const [activeStep, setActiveStep] = useState(0);
+  const [isExporting, setIsExporting] = useState(false);
   const steps = ['Personal Info', 'Education', 'Experience', 'Skills', 'Preview'];
   
   const { 
@@ -16,6 +18,16 @@ export default function Builder() {
     updatePersonalInfo, 
     saveCurrentResume 
   } = useResume();
+
+  const handleExportPDF = () => {
+    setIsExporting(true);
+    
+    // Simulate PDF generation
+    setTimeout(() => {
+      setIsExporting(false);
+      alert('PDF export feature will be implemented in the next version. Your resume would be downloaded as a PDF file.');
+    }, 2000);
+  };
 
   return (
     <MainLayout>
@@ -217,6 +229,13 @@ export default function Builder() {
 
           {/* AI Suggestions Panel */}
           <div className="lg:col-span-1">
+            {activeStep === 4 && (
+              <PDFExport 
+                onExport={handleExportPDF}
+                isLoading={isExporting}
+              />
+            )}
+            
             {activeStep === 0 && (
               <AISuggestions 
                 section="summary" 
