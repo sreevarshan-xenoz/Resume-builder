@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import Button from '../ui/Button';
+import ImageWithFallback from '../ui/ImageWithFallback';
+import { getTemplateImage } from '../../utils/templateImages';
 
 interface TemplateCardProps {
   id: string;
   title: string;
   description: string;
-  imageSrc: string;
+  imageSrc?: string; // Made optional since we can derive from ID
+  fallbackSrc?: string;
   popular?: boolean;
+  onImageError?: (error: Error) => void;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
@@ -16,9 +19,25 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   title,
   description,
   imageSrc,
+  fallbackSrc,
   popular = false,
+  onImageError,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  // Get template image configuration
+  const templateImageConfig = getTemplateImage(id);
+  const finalImageSrc = imageSrc || templateImageConfig.previewImage;
+  const finalFallbackSrc = fallbackSrc || templateImageConfig.fallbackImage;
+
+  const handleImageError = (error: Error) => {
+    setImageError(true);
+    console.warn(`Template image error for ${id}:`, error);
+    if (onImageError) {
+      onImageError(error);
+    }
+  };
 
   return (
     <div 
@@ -33,13 +52,23 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       )}
       
       <div className="relative h-48 overflow-hidden">
-        <Image
-          src={imageSrc}
-          alt={title}
+        <ImageWithFallback
+          src={finalImageSrc}
+          fallbackSrc={finalFallbackSrc}
+          alt={`${title} template preview`}
           fill
           className={`object-cover transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
+          onError={handleImageError}
+          priority={popular}
         />
         <div className={`absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-70' : 'opacity-40'}`}></div>
+        
+        {/* Error indicator */}
+        {imageError && (
+          <div className="absolute top-2 left-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded">
+            Preview unavailable
+          </div>
+        )}
       </div>
       
       <div className="p-5">
