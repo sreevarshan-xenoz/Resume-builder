@@ -30,11 +30,15 @@ export function useTemplateImages(options: UseTemplateImagesOptions = {}) {
 
     try {
       await preloadTemplateImages(ids);
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        loadedImages: new Set([...prev.loadedImages, ...ids]),
-      }));
+      setState(prev => {
+        const newLoadedImages = new Set(prev.loadedImages);
+        ids.forEach(id => newLoadedImages.add(id));
+        return {
+          ...prev,
+          loading: false,
+          loadedImages: newLoadedImages,
+        };
+      });
     } catch (error) {
       setState(prev => ({
         ...prev,
@@ -45,19 +49,31 @@ export function useTemplateImages(options: UseTemplateImagesOptions = {}) {
   }, []);
 
   const markImageLoaded = useCallback((templateId: string) => {
-    setState(prev => ({
-      ...prev,
-      loadedImages: new Set([...prev.loadedImages, templateId]),
-      failedImages: new Set([...prev.failedImages].filter(id => id !== templateId)),
-    }));
+    setState(prev => {
+      const newLoadedImages = new Set(prev.loadedImages);
+      const newFailedImages = new Set(prev.failedImages);
+      newLoadedImages.add(templateId);
+      newFailedImages.delete(templateId);
+      return {
+        ...prev,
+        loadedImages: newLoadedImages,
+        failedImages: newFailedImages,
+      };
+    });
   }, []);
 
   const markImageFailed = useCallback((templateId: string) => {
-    setState(prev => ({
-      ...prev,
-      failedImages: new Set([...prev.failedImages, templateId]),
-      loadedImages: new Set([...prev.loadedImages].filter(id => id !== templateId)),
-    }));
+    setState(prev => {
+      const newLoadedImages = new Set(prev.loadedImages);
+      const newFailedImages = new Set(prev.failedImages);
+      newFailedImages.add(templateId);
+      newLoadedImages.delete(templateId);
+      return {
+        ...prev,
+        failedImages: newFailedImages,
+        loadedImages: newLoadedImages,
+      };
+    });
   }, []);
 
   const getImageStatus = useCallback((templateId: string) => {
